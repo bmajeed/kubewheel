@@ -1,0 +1,7 @@
+{{ define "content"}}
+<ul>
+{{ range .apps }}
+    <li><a href="/apps/{{ .Name }}">{{ .Name }}</a></li>
+{{ end }}
+</ul>
+{{ end }}

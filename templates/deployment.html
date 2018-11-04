@@ -1,0 +1,7 @@
+{{ define "content"}}
+<ul>
+{{ range .deployments }}
+    <li>{{ .Name }} -> {{ .Status.AvailableReplicas }}/ {{ .Status.Replicas }}</li>
+{{ end }}
+</ul>
+{{ end }}
