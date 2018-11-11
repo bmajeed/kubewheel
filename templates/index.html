@@ -1,7 +1,7 @@
 {{ define "content"}}
     <ul>
     {{ range .apps }}
-        <li><a href="/apps/{{ .Name }}">{{ .Name }}</a></li>
+        <li><a href="/apps/{{ .Name }}">{{ .Name }}</a> - {{.Status.Phase}}</li>
     {{ end }}
     </ul>
     <div>
