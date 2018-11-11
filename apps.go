@@ -6,6 +6,10 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+type App struct {
+	Name string `json:"name" form:"name" binding:"required"`
+}
+
 func GetApps() (*corev1.NamespaceList, error) {
 	clientset, err := getKubeClientset()
 	if err != nil {
