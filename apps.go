@@ -6,7 +6,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func getApps() (*corev1.NamespaceList, error) {
+func GetApps() (*corev1.NamespaceList, error) {
 	clientset, err := getKubeClientset()
 	if err != nil {
 		return nil, err
@@ -14,7 +14,7 @@ func getApps() (*corev1.NamespaceList, error) {
 	return clientset.CoreV1().Namespaces().List(metav1.ListOptions{})
 }
 
-func getApp(name string) (*v1.DeploymentList, error) {
+func GetApp(name string) (*v1.DeploymentList, error) {
 	clientset, err := getKubeClientset()
 	if err != nil {
 		return nil, err
