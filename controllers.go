@@ -22,6 +22,7 @@ func showApp(context *gin.Context) {
 	}
 	context.HTML(http.StatusOK, "deployment", gin.H{
 		"deployments": deploymentsList.Items,
+		"name": context.Param("app_name"),
 	})
 }
 
@@ -40,8 +41,19 @@ func createApp(context *gin.Context) {
 	context.Redirect(http.StatusMovedPermanently, "/apps/"+app.Name)
 }
 
+func deleteApp(context *gin.Context) {
+	app := App{context.Param("app_name")}
+	err := app.Delete()
+	if err != nil {
+		context.JSON(http.StatusBadRequest, err)
+		return
+	}
+	context.Redirect(http.StatusMovedPermanently, "/apps")
+}
+
 func Register(group gin.RouterGroup) {
 	group.GET("/", listApps)
 	group.POST("/", createApp)
 	group.GET("/:app_name", showApp)
+	group.POST("/:app_name/delete", deleteApp)
 }

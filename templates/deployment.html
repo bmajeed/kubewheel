@@ -1,7 +1,10 @@
 {{ define "content"}}
-<ul>
-{{ range .deployments }}
-    <li>{{ .Name }} -> {{ .Status.AvailableReplicas }}/ {{ .Status.Replicas }}</li>
-{{ end }}
-</ul>
+    <ul>
+    {{ range .deployments }}
+        <li>{{ .Name }} -> {{ .Status.AvailableReplicas }}/ {{ .Status.Replicas }}</li>
+    {{ end }}
+    </ul>
+    <form action="/apps/{{.name}}/delete" method="post">
+        <input type="submit" value="DELETE">
+    </form>
 {{ end }}
