@@ -31,7 +31,7 @@ func (a App) Create() error {
 	return err
 }
 
-func (a App) delete() error {
+func (a App) Delete() error {
 	clientset, err := getKubeClientset()
 	if err != nil {
 		return err
