@@ -6,7 +6,7 @@ import (
 )
 
 func listApps(context *gin.Context) {
-	appsList, err := getApps()
+	appsList, err := GetApps()
 	if err != nil {
 		panic(err.Error())
 	}
@@ -16,7 +16,7 @@ func listApps(context *gin.Context) {
 }
 
 func showApp(context *gin.Context) {
-	deploymentsList, err := getApp(context.Param("app_name"))
+	deploymentsList, err := GetApp(context.Param("app_name"))
 	if err != nil {
 		panic(err.Error())
 	}
