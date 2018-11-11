@@ -25,7 +25,23 @@ func showApp(context *gin.Context) {
 	})
 }
 
+func createApp(context *gin.Context)  {
+	var app App
+	err := context.Bind(&app)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, err)
+		return
+	}
+	err = CreateApp(app.Name)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, err)
+		return
+	}
+	context.Redirect(http.StatusMovedPermanently, "/apps/"+app.Name)
+}
+
 func Register(group gin.RouterGroup) {
 	group.GET("/", listApps)
+	group.POST("/", createApp)
 	group.GET("/:app_name", showApp)
 }

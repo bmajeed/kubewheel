@@ -1,7 +1,13 @@
 {{ define "content"}}
-<ul>
-{{ range .apps }}
-    <li><a href="/apps/{{ .Name }}">{{ .Name }}</a></li>
-{{ end }}
-</ul>
+    <ul>
+    {{ range .apps }}
+        <li><a href="/apps/{{ .Name }}">{{ .Name }}</a></li>
+    {{ end }}
+    </ul>
+    <div>
+        <h3>Create app:</h3>
+        <form method="post">
+            <input name="name" placeholder="Name"><input type="submit" value="Create">
+        </form>
+    </div>
 {{ end }}
