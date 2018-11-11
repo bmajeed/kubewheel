@@ -31,6 +31,14 @@ func (a App) Create() error {
 	return err
 }
 
+func (a App) delete() error {
+	clientset, err := getKubeClientset()
+	if err != nil {
+		return err
+	}
+	return clientset.CoreV1().Namespaces().Delete(a.Name, &metav1.DeleteOptions{})
+}
+
 func (a App) GetAppDeployments() (*v1.DeploymentList, error) {
 	clientset, err := getKubeClientset()
 	if err != nil {
