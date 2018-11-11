@@ -16,7 +16,7 @@ func listApps(context *gin.Context) {
 }
 
 func showApp(context *gin.Context) {
-	deploymentsList, err := GetApp(context.Param("app_name"))
+	deploymentsList, err := App{context.Param("app_name")}.GetAppDeployments()
 	if err != nil {
 		panic(err.Error())
 	}
@@ -25,14 +25,14 @@ func showApp(context *gin.Context) {
 	})
 }
 
-func createApp(context *gin.Context)  {
+func createApp(context *gin.Context) {
 	var app App
 	err := context.Bind(&app)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, err)
 		return
 	}
-	err = CreateApp(app.Name)
+	err = app.Create()
 	if err != nil {
 		context.JSON(http.StatusBadRequest, err)
 		return

@@ -18,23 +18,23 @@ func GetApps() (*corev1.NamespaceList, error) {
 	return clientset.CoreV1().Namespaces().List(metav1.ListOptions{})
 }
 
-func GetApp(name string) (*v1.DeploymentList, error) {
-	clientset, err := getKubeClientset()
-	if err != nil {
-		return nil, err
-	}
-	return clientset.AppsV1().Deployments(name).List(metav1.ListOptions{})
-}
-
-func CreateApp(name string) error {
+func (a App) Create() error {
 	clientset, err := getKubeClientset()
 	if err != nil {
 		return err
 	}
 	_, err = clientset.CoreV1().Namespaces().Create(&corev1.Namespace{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: name,
+			Name: a.Name,
 		},
 	})
 	return err
+}
+
+func (a App) GetAppDeployments() (*v1.DeploymentList, error) {
+	clientset, err := getKubeClientset()
+	if err != nil {
+		return nil, err
+	}
+	return clientset.AppsV1().Deployments(a.Name).List(metav1.ListOptions{})
 }
