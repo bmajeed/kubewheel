@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"kubewheel/GinHTMLRender"
 	"net/http"
@@ -39,7 +40,9 @@ func main() {
 }
 
 func checkEnv() error {
-	os.Getenv("KUBEWHEEL")
+	if os.Getenv("GITHUB_TOKEN") == ""{
+		return errors.New("GITHUB_TOKEN token is not set")
+	}
 	clientset, err := getKubeClientset()
 	if err != nil {
 		return err
