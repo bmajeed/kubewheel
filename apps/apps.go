@@ -1,4 +1,4 @@
-package main
+package apps
 
 import (
 	"k8s.io/api/apps/v1"
@@ -8,6 +8,25 @@ import (
 
 type App struct {
 	Name string `json:"name" form:"name" binding:"required"`
+}
+
+type KubeWheelConfig struct {
+	Build struct {
+		Location string `json:"location" binding:"required"` // cluster / ci
+	} `json:"build" binding:"required"`
+	Run []struct {
+		Name    string `json:"name" binding:"required"`
+		Command string `json:"command"`
+		Image   string `json:"image,default=build"` // build
+	} `json:"run" binding:"required"`
+}
+
+func (kubeWheelconfig *KubeWheelConfig) clean() {
+	for i := 0; i < len(kubeWheelconfig.Run); i++ {
+		if kubeWheelconfig.Run[i].Image == ""{
+			kubeWheelconfig.Run[i].Image = "build"
+		}
+	}
 }
 
 func GetApps() (*corev1.NamespaceList, error) {

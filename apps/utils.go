@@ -1,12 +1,15 @@
-package main
+package apps
 
 import (
+	"context"
 	"github.com/atrox/homedir"
 	"github.com/gin-gonic/gin"
+	"github.com/google/go-github/github"
+	"golang.org/x/oauth2"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	"math/rand"
+	"os"
 	"path/filepath"
 )
 
@@ -30,29 +33,24 @@ func getKubeConfig() (*rest.Config, error) {
 		return nil, err
 	}
 
-	context := ""
+	contextName := ""
 	if gin.Mode() != gin.ReleaseMode {
-		context = "minikube"
+		contextName = "minikube"
 	}
 	return clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
 		&clientcmd.ClientConfigLoadingRules{ExplicitPath: filepath.Join(homeDir, ".kube", "config")},
 		&clientcmd.ConfigOverrides{
-			CurrentContext: context,
+			CurrentContext: contextName,
 		}).ClientConfig()
 }
 
+func getGithubClient() *github.Client {
+	ctx := context.Background()
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")},
+	)
+	tc := oauth2.NewClient(ctx, ts)
 
-func randomString(n int, onlyLower ...bool) string {
-	var letter []rune
-	if len(onlyLower) > 0 {
-		letter = []rune("abcdefghijklmnopqrstuvwxyz0123456789")
-	} else {
-		letter = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-	}
-
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letter[rand.Intn(len(letter))]
-	}
-	return string(b)
+	return github.NewClient(tc)
 }
+

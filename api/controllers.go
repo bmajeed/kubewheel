@@ -1,7 +1,8 @@
-package main
+package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"kubewheel/apps"
 	"net/http"
 )
 
@@ -16,18 +17,18 @@ func listApps(context *gin.Context) {
 }
 
 func showApp(context *gin.Context) {
-	deploymentsList, err := App{context.Param("app_name")}.GetAppDeployments()
+	deploymentsList, err := apps.App{Name: context.Param("app_name")}.GetAppDeployments()
 	if err != nil {
 		panic(err.Error())
 	}
 	context.HTML(http.StatusOK, "deployment", gin.H{
 		"deployments": deploymentsList.Items,
-		"name": context.Param("app_name"),
+		"name":        context.Param("app_name"),
 	})
 }
 
 func createApp(context *gin.Context) {
-	var app App
+	var app apps.App
 	err := context.Bind(&app)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, err)
@@ -42,7 +43,7 @@ func createApp(context *gin.Context) {
 }
 
 func deleteApp(context *gin.Context) {
-	app := App{context.Param("app_name")}
+	app := apps.App{Name: context.Param("app_name")}
 	err := app.Delete()
 	if err != nil {
 		context.JSON(http.StatusBadRequest, err)
@@ -54,6 +55,6 @@ func deleteApp(context *gin.Context) {
 func Register(group gin.RouterGroup) {
 	group.GET("/", listApps)
 	group.POST("/", createApp)
-	group.GET("/:app_name", showApp)
 	group.POST("/:app_name/delete", deleteApp)
+	group.GET("/:app_name", showApp)
 }
