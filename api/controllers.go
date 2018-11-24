@@ -7,7 +7,7 @@ import (
 )
 
 func listApps(context *gin.Context) {
-	appsList, err := GetApps()
+	appsList, err := apps.GetApps()
 	if err != nil {
 		panic(err.Error())
 	}
