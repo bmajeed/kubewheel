@@ -21,7 +21,7 @@ type KubeWheelConfig struct {
 	} `json:"run" binding:"required"`
 }
 
-func (kubeWheelconfig *KubeWheelConfig) clean() {
+func (kubeWheelconfig *KubeWheelConfig) Clean() {
 	for i := 0; i < len(kubeWheelconfig.Run); i++ {
 		if kubeWheelconfig.Run[i].Image == ""{
 			kubeWheelconfig.Run[i].Image = "build"
@@ -30,7 +30,7 @@ func (kubeWheelconfig *KubeWheelConfig) clean() {
 }
 
 func GetApps() (*corev1.NamespaceList, error) {
-	clientset, err := getKubeClientset()
+	clientset, err := GetKubeClientset()
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func GetApps() (*corev1.NamespaceList, error) {
 }
 
 func (a App) Create() error {
-	clientset, err := getKubeClientset()
+	clientset, err := GetKubeClientset()
 	if err != nil {
 		return err
 	}
@@ -51,7 +51,7 @@ func (a App) Create() error {
 }
 
 func (a App) Delete() error {
-	clientset, err := getKubeClientset()
+	clientset, err := GetKubeClientset()
 	if err != nil {
 		return err
 	}
@@ -59,7 +59,7 @@ func (a App) Delete() error {
 }
 
 func (a App) GetAppDeployments() (*v1.DeploymentList, error) {
-	clientset, err := getKubeClientset()
+	clientset, err := GetKubeClientset()
 	if err != nil {
 		return nil, err
 	}

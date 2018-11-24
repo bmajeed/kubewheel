@@ -4,6 +4,8 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"kubewheel/GinHTMLRender"
+	"kubewheel/api"
+	"kubewheel/apps"
 	"net/http"
 	"os"
 )
@@ -18,7 +20,7 @@ func main() {
 	r.HTMLRender = render.Create()
 
 	r.GET("/status", func(context *gin.Context) {
-		clientset, err := getKubeClientset()
+		clientset, err := apps.GetKubeClientset()
 		if err != nil{
 			panic(err.Error())
 		}
@@ -30,7 +32,7 @@ func main() {
 			},
 		})
 	})
-	Register(*r.Group("/apps"))
+	api.Register(*r.Group("/apps"))
 
 	err := checkEnv()
 	if err != nil {
@@ -43,7 +45,7 @@ func checkEnv() error {
 	if os.Getenv("GITHUB_TOKEN") == ""{
 		return errors.New("GITHUB_TOKEN token is not set")
 	}
-	clientset, err := getKubeClientset()
+	clientset, err := apps.GetKubeClientset()
 	if err != nil {
 		return err
 	}

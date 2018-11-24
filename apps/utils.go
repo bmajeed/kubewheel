@@ -1,19 +1,15 @@
 package apps
 
 import (
-	"context"
 	"github.com/atrox/homedir"
 	"github.com/gin-gonic/gin"
-	"github.com/google/go-github/github"
-	"golang.org/x/oauth2"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	"os"
 	"path/filepath"
 )
 
-func getKubeClientset() (*kubernetes.Clientset, error) {
+func GetKubeClientset() (*kubernetes.Clientset, error) {
 	config, err := getKubeConfig()
 
 	if err != nil {
@@ -43,14 +39,3 @@ func getKubeConfig() (*rest.Config, error) {
 			CurrentContext: contextName,
 		}).ClientConfig()
 }
-
-func getGithubClient() *github.Client {
-	ctx := context.Background()
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")},
-	)
-	tc := oauth2.NewClient(ctx, ts)
-
-	return github.NewClient(tc)
-}
-
