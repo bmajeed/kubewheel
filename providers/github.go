@@ -40,7 +40,7 @@ func GetConfigFromRepo(repo, branch string) (*apps.KubeWheelConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	kubewheelConfig.Clean()
 	return &kubewheelConfig, nil
 }
 
